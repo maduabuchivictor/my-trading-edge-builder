@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Trading Edge Builder</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>📊 My Trading Edge Builder</h1>
+    <div>
+      <button id="themeToggle">🌙 Toggle Theme</button>
+      <button id="manageToolsBtn">🛠 Management Tools</button>
+    </div>
+  </header>
+
+  <!-- Dashboard -->
+  <section class="dashboard card">
+    <div class="stat-box">
+      <h3>Total Trades</h3>
+      <p id="totalTrades">0</p>
+    </div>
+    <div class="stat-box">
+      <h3>Win Rate</h3>
+      <p id="overallWinRate">0%</p>
+    </div>
+    <div class="stat-box">
+      <h3>🔥 Win Streak</h3>
+      <p id="winStreak">0</p>
+    </div>
+  </section>
+
+  <!-- Equity Curve -->
+  <canvas id="equityChart"></canvas>
+
+  <!-- Add Trade -->
+  <section class="card">
+    <h2>➕ Add Trade</h2>
+    <form id="tradeForm">
+      <select id="setup"></select>
+      <select id="timeframe"></select>
+      <select id="pair"></select>
+      <select id="result">
+        <option value="win">✅ Win</option>
+        <option value="loss">❌ Loss</option>
+      </select>
+      <input type="file" id="screenshot" accept="image/*">
+      <textarea id="note" placeholder="What did I see? Why did I enter? (Optional)"></textarea>
+      <button type="submit" class="primary-btn">🚀 Add Trade</button>
+    </form>
+  </section>
+
+  <!-- Trades List -->
+  <section class="card">
+    <h2>📂 Trades</h2>
+    <div id="tradeList"></div>
+  </section>
+
+  <!-- Stats per Pair -->
+  <section class="card stats-section">
+    <h2>📈 Detailed Stats by Pair</h2>
+    <div id="pairStatsContainer"></div>
+  </section>
+
+  <!-- Management Tools (Initially hidden) -->
+  <section class="card" id="managementTools" style="display:none;">
+    <h2>🛠 Management Tools</h2>
+
+    <!-- Strategies -->
+    <div class="management-section">
+      <h3>Strategies</h3>
+      <input type="text" id="newStrategy" placeholder="Add new strategy">
+      <button id="addStrategyBtn">➕ Add</button>
+      <ul id="strategyList"></ul>
+    </div>
+
+    <!-- Timeframes -->
+    <div class="management-section">
+      <h3>Timeframes</h3>
+      <input type="text" id="newTimeframe" placeholder="Add new timeframe">
+      <button id="addTimeframeBtn">➕ Add</button>
+      <ul id="timeframeList"></ul>
+    </div>
+
+    <!-- Pairs/Markets -->
+    <div class="management-section">
+      <h3>Pairs / Markets</h3>
+      <input type="text" id="newPair" placeholder="Add new pair/market">
+      <button id="addPairBtn">➕ Add</button>
+      <ul id="pairList"></ul>
+    </div>
+
+    <button id="resetAllBtn" class="primary-btn">⚠ Reset All Data</button>
+  </section>
+
+</div>
+
+<!-- Image Modal -->
+<div id="imageModal" class="modal">
+  <span id="closeModal">✖</span>
+  <img id="modalImage">
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

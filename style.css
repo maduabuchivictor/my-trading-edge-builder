@@ -1,0 +1,234 @@
+/* ===== ROOT ===== */
+:root {
+  --bg-color:#0f172a;
+  --card-color:#1e293b;
+  --primary-color:#3b82f6;
+  --win-color:#22c55e;
+  --loss-color:#ef4444;
+  --text-color:#f1f5f9;
+  --border-radius:12px;
+  --stat-margin:8px;
+  --font-small:14px;
+}
+
+body {
+  background:var(--bg-color);
+  color:var(--text-color);
+  padding:20px;
+  font-family:Arial,sans-serif;
+}
+
+.container {
+  max-width:900px;
+  margin:auto;
+}
+
+header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+header h1 {
+  font-size:1.8rem;
+}
+
+header button {
+  margin-left:5px;
+  padding:6px 12px;
+  border:none;
+  border-radius:12px;
+  background:var(--primary-color);
+  color:#fff;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+header button:hover {
+  transform:scale(1.05);
+}
+
+.card {
+  background:var(--card-color);
+  padding:20px;
+  border-radius:var(--border-radius);
+  margin-bottom:20px;
+}
+
+select,input,textarea,button {
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border-radius:var(--border-radius);
+  border:none;
+  font-size:1rem;
+}
+
+textarea {
+  height:80px;
+  resize:none;
+}
+
+.primary-btn {
+  background:var(--primary-color);
+  color:#fff;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.primary-btn:hover {
+  transform:scale(1.03);
+}
+
+.dashboard {
+  display:flex;
+  justify-content:space-between;
+  text-align:center;
+  flex-wrap:wrap;
+}
+
+.stat-box {
+  flex:1;
+  margin:10px;
+}
+
+.trade-card {
+  background:var(--bg-color);
+  padding:15px;
+  border-radius:var(--border-radius);
+  margin-bottom:15px;
+  border:1px solid #333;
+}
+
+.trade-header {
+  font-weight:bold;
+  margin-bottom:8px;
+  font-size:1rem;
+}
+
+.trade-note {
+  margin-top:6px;
+  font-size:var(--font-small);
+}
+
+.trade-card img {
+  margin-top:8px;
+  border-radius:8px;
+  max-width:100px;
+  cursor:pointer;
+}
+
+.trade-actions button {
+  margin-top:8px;
+  margin-right:5px;
+  padding:6px 10px;
+  border-radius:8px;
+  font-size:var(--font-small);
+  cursor:pointer;
+}
+
+.win {
+  color:var(--win-color);
+}
+
+.loss {
+  color:var(--loss-color);
+}
+
+/* ===== Detailed Stats ===== */
+.stats-section .pair-card {
+  background:var(--card-color);
+  padding:15px;
+  border-radius:12px;
+  margin-bottom:15px;
+  color: var(--text-color); /* readable in light/dark mode */
+}
+
+.stats-section h4 {
+  margin:5px 0;
+  font-size:1rem;
+}
+
+/* Strategy combo colors */
+.strategy-win {
+  color:var(--win-color);
+  font-weight:bold;
+}
+
+.strategy-loss {
+  color:var(--loss-color);
+  font-weight:bold;
+}
+
+/* ===== Management Tools ===== */
+.management-section {
+  margin-top:15px;
+}
+
+.management-section ul {
+  list-style:none;
+  padding-left:0;
+}
+
+.management-section li {
+  padding:5px 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.management-section li button {
+  margin-left:5px;
+  padding:4px 8px;
+}
+
+/* ===== Modal ===== */
+.modal {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.85);
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+
+.modal img {
+  max-width:90%;
+  max-height:90%;
+  border-radius:12px;
+}
+
+#closeModal {
+  position:absolute;
+  top:15px;
+  right:20px;
+  font-size:25px;
+  cursor:pointer;
+  color:#fff;
+}
+
+/* ===== Light Mode ===== */
+.light-mode {
+  --bg-color:#f1f5f9;
+  --card-color:#fff;
+  --text-color:#111827;
+  --win-color:#16a34a;
+  --loss-color:#dc2626;
+}
+
+/* ===== Responsive ===== */
+@media (max-width:600px) {
+  .dashboard {
+    flex-direction:column;
+  }
+  .trade-card img {
+    max-width:80px;
+  }
+  .management-section input,
+  .management-section button {
+    width:100%;
+    margin-top:5px;
+  }
+}
