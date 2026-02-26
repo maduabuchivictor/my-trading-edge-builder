@@ -1,14 +1,16 @@
 // ========================================
-// TRADING EDGE BUILDER v2.1
+// TRADING EDGE BUILDER v2.2
 // Advanced Trading Analytics Platform
 // ========================================
 
 // FEATURES:
-// 1. MULTI-IMAGE UPLOAD
+// 1. MULTI-IMAGE UPLOAD & MANAGEMENT (NEW v2.2)
 //    - Up to 4 images per trade (enforced at selection and submission)
 //    - Live preview of selected images before submitting
-//    - Image persistence in localStorage
-//    - Full-size image viewer with modal on click
+//    - Click any thumbnail to view fullscreen in modal
+//    - Remove button on each thumbnail to delete mistaken selections
+//    - File input automatically updates when images are removed
+//    - Improved UX for managing multiple uploads
 //
 // 2. ADVANCED FILTERING
 //    - Filter by pair, strategy, timeframe, outcome (win/loss), date range
@@ -33,7 +35,7 @@
 //    - Separated into slide-out panel from left
 //    - Mutual exclusion with filter panel
 //
-// 6. SIDE PANEL SYSTEM (v2.1)
+// 6. SIDE PANEL SYSTEM (v2.1+)
 //    - Slide-out animation from left (300ms transitions)
 //    - Mutually exclusive panels (opening one closes the other)
 //    - X close buttons for easy dismissal
@@ -331,14 +333,75 @@ closeManagementBtn.addEventListener("click", () => {
   managementTools.classList.remove("open");
 });
 
-// ======== Image preview helper ========
+// ======== Image preview helper with removal ========
 function showImagePreviews(sources) {
   previewContainer.innerHTML = "";
   if (!sources) return;
-  sources.forEach((src) => {
+  sources.forEach((src, idx) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "preview-item";
     const img = document.createElement("img");
     img.src = src;
-    previewContainer.appendChild(img);
+    img.title = "Click to view";
+    // click to open in modal
+    img.addEventListener("click", () => {
+      openModal(src);
+    });
+    wrapper.appendChild(img);
+    // remove button (only for file previews, not stored images)
+    const removeBtn = document.createElement("button");
+    removeBtn.className = "remove-btn";
+    removeBtn.textContent = "✕";
+    removeBtn.type = "button";
+    removeBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      removeImageFromPreview(idx);
+    });
+    wrapper.appendChild(removeBtn);
+    previewContainer.appendChild(wrapper);
+  });
+}
+
+// Remove image from file input and rebuild preview
+function removeImageFromPreview(index) {
+  const files = Array.from(screenshotInput.files);
+  files.splice(index, 1);
+  // rebuild FileList without the deleted file
+  const dt = new DataTransfer();
+  files.forEach((f) => dt.items.add(f));
+  screenshotInput.files = dt.files;
+  // rebuild preview
+  rebuildPreview();
+}
+
+// rebuild preview from current file input
+function rebuildPreview() {
+  const files = Array.from(screenshotInput.files);
+  previewContainer.innerHTML = "";
+  files.forEach((file, idx) => {
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const wrapper = document.createElement("div");
+      wrapper.className = "preview-item";
+      const img = document.createElement("img");
+      img.src = ev.target.result;
+      img.title = "Click to view";
+      img.addEventListener("click", () => {
+        openModal(ev.target.result);
+      });
+      wrapper.appendChild(img);
+      const removeBtn = document.createElement("button");
+      removeBtn.className = "remove-btn";
+      removeBtn.textContent = "✕";
+      removeBtn.type = "button";
+      removeBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        removeImageFromPreview(idx);
+      });
+      wrapper.appendChild(removeBtn);
+      previewContainer.appendChild(wrapper);
+    };
+    reader.readAsDataURL(file);
   });
 }
 
@@ -351,18 +414,8 @@ screenshotInput.addEventListener("change", () => {
     const dt = new DataTransfer();
     files.slice(0, 4).forEach((f) => dt.items.add(f));
     screenshotInput.files = dt.files;
-    files = Array.from(dt.files);
   }
-  previewContainer.innerHTML = "";
-  files.forEach((file) => {
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const img = document.createElement("img");
-      img.src = ev.target.result;
-      previewContainer.appendChild(img);
-    };
-    reader.readAsDataURL(file);
-  });
+  rebuildPreview();
 });
 
 // ======== Filter panel interactions ========

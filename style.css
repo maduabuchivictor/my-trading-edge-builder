@@ -1,5 +1,5 @@
 /* 
-  Trading Edge Builder v2.1 - Styling
+  Trading Edge Builder v2.2 - Styling
   
   CSS Features:
   - Dark mode (default) with light mode toggle
@@ -11,11 +11,12 @@
   - Dashboard with statistics cards
   - Trade cards with image galleries
   
-  UPDATES v2.1:
-  - Mutual exclusive panel styling (filter and management)
-  - Improved panel header with flex alignment
-  - Better close button positioning
-  - Enhanced mobile responsiveness
+  UPDATES v2.2:
+  - Interactive image preview thumbnails with hover effects
+  - Remove buttons on image thumbnails for easy deletion
+  - Improved preview container with flex layout
+  - Better cursor and visual feedback for image interactions
+  - Mobile-friendly image removal UX
 */
 
 /* ===== ROOT ===== */
@@ -232,9 +233,41 @@ textarea {
   gap: 10px;
   margin-top: 10px;
 }
+#previewContainer .preview-item {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
 #previewContainer img {
-  max-width: 80px;
+  max-width: 100%;
+  height: 100%;
   border-radius: 8px;
+  cursor: pointer;
+  object-fit: cover;
+}
+#previewContainer .preview-item:hover img {
+  opacity: 0.8;
+}
+#previewContainer .remove-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  z-index: 10;
+}
+#previewContainer .remove-btn:hover {
+  background: #dc2626;
 }
 
 /* filter panel and controls */
