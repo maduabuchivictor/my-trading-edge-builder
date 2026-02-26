@@ -1,109 +1,181 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Trading Edge Builder</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
+  <!-- 
+    Trading Edge Builder v2.1 - Advanced Trading Analytics Platform
+    
+    FEATURES:
+    - Multiple Image Upload: Add up to 4 images per trade with live preview
+    - Advanced Filtering: Filter trades by pair, strategy, timeframe, date range, and outcome
+    - Sliding Panels: Filter panel and Management tools slide from left (mutually exclusive)
+    - Trade History Toggle: Show recent trade only or all trades
+    - Win/Loss Tracking: Real-time counters for wins and losses in dashboard
+    - Trade Management: Add, edit, delete trades with persistent storage
+    - Pair Statistics: Detailed win rates by pair, strategy, and timeframe combinations
+    - Dark/Light Mode: Toggle between dark and light themes
+    - Responsive Design: Works seamlessly on desktop and mobile
+    
+    UPDATED v2.1:
+    - Mutual exclusion for side panels (only one visible at a time)
+    - X close buttons for easy panel dismissal
+    - Better panel header alignment with title and close button
+    - Improved management tools accessibility
+  -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Trading Edge Builder</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>📊 My Trading Edge Builder</h1>
+        <div>
+          <button id="themeToggle">🌙 Toggle Theme</button>
+          <button id="manageToolsBtn">🛠 Management Tools</button>
+        </div>
+      </header>
 
-<div class="container">
-  <header>
-    <h1>📊 My Trading Edge Builder</h1>
-    <div>
-      <button id="themeToggle">🌙 Toggle Theme</button>
-      <button id="manageToolsBtn">🛠 Management Tools</button>
+      <!-- Dashboard -->
+      <section class="dashboard card">
+        <div class="stat-box">
+          <h3>Total Trades</h3>
+          <p id="totalTrades">0</p>
+        </div>
+        <div class="stat-box">
+          <h3>Wins</h3>
+          <p id="winCount">0</p>
+        </div>
+        <div class="stat-box">
+          <h3>Losses</h3>
+          <p id="lossCount">0</p>
+        </div>
+        <div class="stat-box">
+          <h3>Win Rate</h3>
+          <p id="overallWinRate">0%</p>
+        </div>
+        <div class="stat-box">
+          <h3>🔥 Win Streak</h3>
+          <p id="winStreak">0</p>
+        </div>
+      </section>
+
+      <!-- Equity Curve -->
+      <canvas id="equityChart"></canvas>
+
+      <!-- Add Trade -->
+      <section class="card">
+        <h2>➕ Add Trade</h2>
+        <form id="tradeForm">
+          <select id="setup"></select>
+          <select id="timeframe"></select>
+          <select id="pair"></select>
+          <select id="result">
+            <option value="win">✅ Win</option>
+            <option value="loss">❌ Loss</option>
+          </select>
+          <input type="file" id="screenshot" accept="image/*" multiple />
+          <!-- Preview selected images before submission - up to 4 images max -->
+          <div id="previewContainer"></div>
+          <textarea
+            id="note"
+            placeholder="What did I see? Why did I enter? (Optional)"
+          ></textarea>
+          <button type="submit" class="primary-btn">🚀 Add Trade</button>
+        </form>
+      </section>
+
+      <!-- Filter Button - Opens sliding filter panel from left -->
+      <!-- Allows filtering trades by pair, result, strategy, timeframe, and date range -->
+      <button id="filterBtn" class="filter-btn">🔍 Filter Trades</button>
+
+      <!-- Trades List with Advanced Filtering -->
+      <!-- Features: Filter controls, show all/recent toggle, image preview on click -->
+      <section class="card trades-container">
+        <h2>📂 Trades</h2>
+        <!-- sliding filter panel -->
+        <div id="filterPanel" class="filter-panel">
+          <div class="panel-header">
+            <h3>Filter Trades</h3>
+            <button id="closeFilterBtn" class="close-btn">✕</button>
+          </div>
+          <select id="filterPair">
+            <option value="">Any Pair</option>
+          </select>
+          <select id="filterResult">
+            <option value="">Any Result</option>
+            <option value="win">✅ Win</option>
+            <option value="loss">❌ Loss</option>
+          </select>
+          <select id="filterStrategy">
+            <option value="">Any Strategy</option>
+          </select>
+          <select id="filterTimeframe">
+            <option value="">Any Timeframe</option>
+          </select>
+          <label>From: <input type="date" id="filterFrom" /></label>
+          <label>To: <input type="date" id="filterTo" /></label>
+          <button id="applyFilterBtn" class="primary-btn">Apply</button>
+          <button id="resetFilterBtn" class="secondary-btn">Reset</button>
+        </div>
+
+        <button id="toggleShowBtn" class="secondary-btn">
+          Show All Trades
+        </button>
+        <div id="tradeList"></div>
+      </section>
+
+      <!-- Stats per Pair -->
+      <section class="card stats-section">
+        <h2>📈 Detailed Stats by Pair</h2>
+        <div id="pairStatsContainer"></div>
+      </section>
+
+      <!-- Management Tools - Slides out from left -->
+      <section class="management-panel" id="managementTools">
+        <div class="panel-header">
+          <h2>Management Tools</h2>
+          <button id="closeManagementBtn" class="close-btn">✕</button>
+        </div>
+
+        <!-- Strategies -->
+        <div class="management-section">
+          <h3>Strategies</h3>
+          <input type="text" id="newStrategy" placeholder="Add new strategy" />
+          <button id="addStrategyBtn">➕ Add</button>
+          <ul id="strategyList"></ul>
+        </div>
+
+        <!-- Timeframes -->
+        <div class="management-section">
+          <h3>Timeframes</h3>
+          <input
+            type="text"
+            id="newTimeframe"
+            placeholder="Add new timeframe"
+          />
+          <button id="addTimeframeBtn">➕ Add</button>
+          <ul id="timeframeList"></ul>
+        </div>
+
+        <!-- Pairs/Markets -->
+        <div class="management-section">
+          <h3>Pairs / Markets</h3>
+          <input type="text" id="newPair" placeholder="Add new pair/market" />
+          <button id="addPairBtn">➕ Add</button>
+          <ul id="pairList"></ul>
+        </div>
+
+        <button id="resetAllBtn" class="primary-btn">⚠ Reset All Data</button>
+      </section>
     </div>
-  </header>
 
-  <!-- Dashboard -->
-  <section class="dashboard card">
-    <div class="stat-box">
-      <h3>Total Trades</h3>
-      <p id="totalTrades">0</p>
-    </div>
-    <div class="stat-box">
-      <h3>Win Rate</h3>
-      <p id="overallWinRate">0%</p>
-    </div>
-    <div class="stat-box">
-      <h3>🔥 Win Streak</h3>
-      <p id="winStreak">0</p>
-    </div>
-  </section>
-
-  <!-- Equity Curve -->
-  <canvas id="equityChart"></canvas>
-
-  <!-- Add Trade -->
-  <section class="card">
-    <h2>➕ Add Trade</h2>
-    <form id="tradeForm">
-      <select id="setup"></select>
-      <select id="timeframe"></select>
-      <select id="pair"></select>
-      <select id="result">
-        <option value="win">✅ Win</option>
-        <option value="loss">❌ Loss</option>
-      </select>
-      <input type="file" id="screenshot" accept="image/*">
-      <textarea id="note" placeholder="What did I see? Why did I enter? (Optional)"></textarea>
-      <button type="submit" class="primary-btn">🚀 Add Trade</button>
-    </form>
-  </section>
-
-  <!-- Trades List -->
-  <section class="card">
-    <h2>📂 Trades</h2>
-    <div id="tradeList"></div>
-  </section>
-
-  <!-- Stats per Pair -->
-  <section class="card stats-section">
-    <h2>📈 Detailed Stats by Pair</h2>
-    <div id="pairStatsContainer"></div>
-  </section>
-
-  <!-- Management Tools (Initially hidden) -->
-  <section class="card" id="managementTools" style="display:none;">
-    <h2>🛠 Management Tools</h2>
-
-    <!-- Strategies -->
-    <div class="management-section">
-      <h3>Strategies</h3>
-      <input type="text" id="newStrategy" placeholder="Add new strategy">
-      <button id="addStrategyBtn">➕ Add</button>
-      <ul id="strategyList"></ul>
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+      <span id="closeModal">✖</span>
+      <img id="modalImage" />
     </div>
 
-    <!-- Timeframes -->
-    <div class="management-section">
-      <h3>Timeframes</h3>
-      <input type="text" id="newTimeframe" placeholder="Add new timeframe">
-      <button id="addTimeframeBtn">➕ Add</button>
-      <ul id="timeframeList"></ul>
-    </div>
-
-    <!-- Pairs/Markets -->
-    <div class="management-section">
-      <h3>Pairs / Markets</h3>
-      <input type="text" id="newPair" placeholder="Add new pair/market">
-      <button id="addPairBtn">➕ Add</button>
-      <ul id="pairList"></ul>
-    </div>
-
-    <button id="resetAllBtn" class="primary-btn">⚠ Reset All Data</button>
-  </section>
-
-</div>
-
-<!-- Image Modal -->
-<div id="imageModal" class="modal">
-  <span id="closeModal">✖</span>
-  <img id="modalImage">
-</div>
-
-<script src="script.js"></script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
